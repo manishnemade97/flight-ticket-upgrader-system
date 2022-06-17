@@ -10,10 +10,11 @@ import com.manish.sahaj.ticketupgrade.model.Ticket;
 
 public interface TicketCSVProcessor {
 
-	List<Ticket> upgradeTicketsFromCSVFile(String filePath, String separator) throws CustomeFileNotFoundException, CustomIOException;
+	List<Ticket> readTicketsFromCSVFile(String filePath) throws CustomeFileNotFoundException, CustomIOException;
 
-	void writeUpgradedTicketsToCsvFile(List<Ticket> tickets, String filePath, String separator) throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException;
+	void writeUpgradedTicketsToCsvFile(List<Ticket> tickets, String filePath)
+			throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException;
 
-	void writeErrorTicketsToCsvFile(List<Ticket> tickets, String filePath, String separator)
+	void writeErrorTicketsToCsvFile(List<Ticket> tickets, String filePath)
 			throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException;
 }

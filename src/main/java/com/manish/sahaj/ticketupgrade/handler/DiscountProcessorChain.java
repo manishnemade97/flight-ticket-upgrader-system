@@ -3,11 +3,17 @@ package com.manish.sahaj.ticketupgrade.handler;
 import com.manish.sahaj.ticketupgrade.model.FlightTicket;
 
 public class DiscountProcessorChain {
+	
+	private static final DiscountProcessorChain INSTANCE = new DiscountProcessorChain();
 
 	DiscountProcessor chain;
 	 
-	public DiscountProcessorChain(){
+	private DiscountProcessorChain(){
 	    buildChain();
+	}
+	
+	public static DiscountProcessorChain getInstance(){
+		return INSTANCE;
 	}
 	 
 	private void buildChain(){

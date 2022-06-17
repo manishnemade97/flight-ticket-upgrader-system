@@ -9,7 +9,7 @@ import com.manish.sahaj.ticketupgrade.exceptions.CustomeFileNotFoundException;
 
 public interface CSVReadWriteService {
 	
-	List<String[]> readData(String filePath, String separator) throws CustomeFileNotFoundException, CustomIOException;
+	List<String[]> readData(String filePath) throws CustomeFileNotFoundException, CustomIOException;
 	
-	void writeData(String path, String separator, List<String[]> data) throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException;
+	void writeData(String path, List<String[]> data) throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException;
 }

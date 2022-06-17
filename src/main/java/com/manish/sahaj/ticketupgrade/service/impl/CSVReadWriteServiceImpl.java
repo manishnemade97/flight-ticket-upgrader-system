@@ -16,8 +16,15 @@ import com.manish.sahaj.ticketupgrade.service.intf.CSVReadWriteService;
 
 public class CSVReadWriteServiceImpl implements CSVReadWriteService {
 
+	private final String csvSeparator;
+	
+	public CSVReadWriteServiceImpl(String separator) {
+		super();
+		csvSeparator = separator;
+	}
+
 	@Override
-	public List<String[]> readData(String filePath, String separator) throws CustomeFileNotFoundException, CustomIOException {
+	public List<String[]> readData(String filePath) throws CustomeFileNotFoundException, CustomIOException {
 
 		String line = "";
 
@@ -26,7 +33,7 @@ public class CSVReadWriteServiceImpl implements CSVReadWriteService {
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 			line = br.readLine();//to skip header
 			while ((line = br.readLine()) != null)
-				data.add(line.split(separator));
+				data.add(line.split(csvSeparator));
 
 		} catch (FileNotFoundException e) {
 			throw new CustomeFileNotFoundException("File not found at "+ filePath, e);
@@ -38,13 +45,13 @@ public class CSVReadWriteServiceImpl implements CSVReadWriteService {
 	}
 	
 	@Override
-	public void writeData(String path, String separator, List<String[]> data) throws CustomeFileNotFoundException, CustomFileSecurityException {
+	public void writeData(String path, List<String[]> data) throws CustomeFileNotFoundException, CustomFileSecurityException {
 
 		File csvOutputFile = new File(path);
 	    
 		try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
 	    	data.stream()
-	          .map(d->String.join(separator,d))
+	          .map(d->String.join(csvSeparator,d))
 	          .forEach(pw::println);
 	    } catch (FileNotFoundException e) {
 	    	throw new CustomeFileNotFoundException("File not found at "+ path, e);

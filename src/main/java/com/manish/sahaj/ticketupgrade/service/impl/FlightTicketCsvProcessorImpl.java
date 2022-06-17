@@ -24,12 +24,33 @@ public class FlightTicketCsvProcessorImpl implements TicketCSVProcessor {
 	}
 
 	@Override
-	public List<Ticket> upgradeTicketsFromCSVFile(String filePath, String separator) throws CustomeFileNotFoundException, CustomIOException {
-		return csvReadWriteService.readData(filePath, separator).stream()
+	public List<Ticket> readTicketsFromCSVFile(String filePath) throws CustomeFileNotFoundException, CustomIOException {
+		return csvReadWriteService.readData(filePath).stream()
 				.map(this::convertToTicketAndUpgrade)
 				.collect(Collectors.toList());
 	}
 
+	
+	@Override
+	public void writeUpgradedTicketsToCsvFile(List<Ticket> tickets, String filePath) throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException {
+		
+		List<String[]> upgradedTicketRows = new ArrayList<>();
+		upgradedTicketRows.add(getUpgradeCSVHeader());
+		upgradedTicketRows.addAll(tickets.stream().filter(Ticket::isValid).map(this::convertToCsvArray).collect(Collectors.toList()));
+		
+		csvReadWriteService.writeData(filePath, upgradedTicketRows);
+	}
+	
+	@Override
+	public void writeErrorTicketsToCsvFile(List<Ticket> tickets, String filePath) throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException {
+		
+		List<String[]> errorTicketRows = new ArrayList<>();
+		errorTicketRows.add(getErrorCSVHeader());
+		errorTicketRows.addAll(tickets.stream().filter(t->!t.isValid()).map(this::convertToCsvArray).collect(Collectors.toList()));
+		
+		csvReadWriteService.writeData(filePath, errorTicketRows);
+	}
+	
 	private FlightTicket convertToTicketAndUpgrade(String[] row) {
 		return new FlightTicket.FlightTicketBuilder().email(row[TicketCSVHeaders.EMAIL.getIndex()].trim())
 				.mobilePhone(row[TicketCSVHeaders.MOBILE_PHONE.getIndex()].trim())
@@ -43,27 +64,7 @@ public class FlightTicketCsvProcessorImpl implements TicketCSVProcessor {
 				.pax(row[TicketCSVHeaders.PAX.getIndex()].trim())
 				.build();
 	}
-	
-	@Override
-	public void writeUpgradedTicketsToCsvFile(List<Ticket> tickets, String filePath, String separator) throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException {
-		
-		List<String[]> upgradedTicketRows = new ArrayList<>();
-		upgradedTicketRows.add(getUpgradeCSVHeader());
-		upgradedTicketRows.addAll(tickets.stream().filter(Ticket::isValid).map(this::convertToCsvArray).collect(Collectors.toList()));
-		
-		csvReadWriteService.writeData(filePath, separator, upgradedTicketRows);
-	}
-	
-	@Override
-	public void writeErrorTicketsToCsvFile(List<Ticket> tickets, String filePath, String separator) throws FileNotFoundException, CustomeFileNotFoundException, CustomFileSecurityException {
-		
-		List<String[]> errorTicketRows = new ArrayList<>();
-		errorTicketRows.add(getErrorCSVHeader());
-		errorTicketRows.addAll(tickets.stream().filter(t->!t.isValid()).map(this::convertToCsvArray).collect(Collectors.toList()));
-		
-		csvReadWriteService.writeData(filePath, separator, errorTicketRows);
-	}
-	
+
 	private String[] convertToCsvArray(Ticket ticket) {
 		String[] row = new String[11];
 		

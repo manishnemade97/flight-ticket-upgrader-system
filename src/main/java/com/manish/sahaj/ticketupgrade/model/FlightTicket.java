@@ -128,14 +128,11 @@ public class FlightTicket extends Ticket {
 		}
 	
 		public FlightTicket build() {
-			FlightTicket ticket =  new FlightTicket(this);
-			ticket.validate();
-			ticket.applyDiscount();
-			return ticket;
+			return new FlightTicket(this);
 		}
 	}
 
-	public void applyDiscount() {
-		new DiscountProcessorChain().process(this);
+	public void applyDiscount(DiscountProcessorChain processorChain) {
+		processorChain.process(this);
 	}
 }

@@ -8,7 +8,7 @@ import com.manish.sahaj.ticketupgrade.model.FlightTicket;
 
 public class TestDiscountProcessorChain {
 	
-	DiscountProcessorChain chain = new DiscountProcessorChain();
+	DiscountProcessorChain chain = DiscountProcessorChain.getInstance();
 
 	@Test
 	public void testDiscountProcessorChainOffer20() {
@@ -25,6 +25,7 @@ public class TestDiscountProcessorChain {
 				.ticketingDate("2019-05-21")
 				.travelDate("2019-07-31")
 				.build();
+		ticket.validate();
 		chain.process(ticket);
 		assertEquals(Discount20Processor.OFFER, ticket.getDiscountCode());
 	}
@@ -44,6 +45,7 @@ public class TestDiscountProcessorChain {
 				.ticketingDate("2019-05-21")
 				.travelDate("2019-07-31")
 				.build();
+		ticket.validate();
 		chain.process(ticket);
 		assertEquals(Discount30Processor.OFFER, ticket.getDiscountCode());
 	}
@@ -63,6 +65,7 @@ public class TestDiscountProcessorChain {
 				.ticketingDate("2019-05-21")
 				.travelDate("2019-07-31")
 				.build();
+		ticket.validate();
 		chain.process(ticket);
 		assertEquals(Discount25Processor.OFFER, ticket.getDiscountCode());
 	}
@@ -82,6 +85,7 @@ public class TestDiscountProcessorChain {
 				.ticketingDate("2019-05-21")
 				.travelDate("2019-07-31")
 				.build();
+		ticket.validate();
 		chain.process(ticket);
 		assertEquals(null, ticket.getDiscountCode());
 	}
@@ -101,6 +105,7 @@ public class TestDiscountProcessorChain {
 				.ticketingDate("2019-05-21")
 				.travelDate("2019-07-31")
 				.build();
+		ticket.validate();
 		chain.process(ticket);
 		assertEquals(null, ticket.getDiscountCode());
 	}

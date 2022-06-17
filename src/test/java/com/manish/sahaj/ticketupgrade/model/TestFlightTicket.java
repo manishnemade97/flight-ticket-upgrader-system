@@ -3,6 +3,7 @@ package com.manish.sahaj.ticketupgrade.model;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.manish.sahaj.ticketupgrade.handler.DiscountProcessorChain;
 import com.manish.sahaj.ticketupgrade.utils.StringUtil;
 
 import static org.junit.Assert.assertEquals;
@@ -28,6 +29,7 @@ public class TestFlightTicket {
 		.ticketingDate("2019-05-21")
 		.travelDate("2019-07-31")
 		.build();
+		validFlightTicket.validate();
 	}
 	
 	@Before
@@ -44,6 +46,7 @@ public class TestFlightTicket {
 		.ticketingDate("2019-21-05")
 		.travelDate("2019-07-31")
 		.build();
+		invalidFlightTicket.validate();
 	}
 
 	@Test
@@ -68,6 +71,7 @@ public class TestFlightTicket {
 	
 	@Test
 	public void testDiscountApplied() {
+		validFlightTicket.applyDiscount(DiscountProcessorChain.getInstance());
 		assertFalse(StringUtil.isEmpty(validFlightTicket.getDiscountCode()));
 		assertEquals("OFFER_20",validFlightTicket.getDiscountCode());
 		

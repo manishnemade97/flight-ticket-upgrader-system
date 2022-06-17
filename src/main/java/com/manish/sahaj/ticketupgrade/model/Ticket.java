@@ -1,5 +1,7 @@
 package com.manish.sahaj.ticketupgrade.model;
 
+import com.manish.sahaj.ticketupgrade.handler.DiscountProcessorChain;
+
 public abstract class Ticket {
 
 	private String firstName;
@@ -120,4 +122,8 @@ public abstract class Ticket {
 	public boolean isValid() {
 		return valid;
 	}
+	
+	public abstract void validate();
+	
+	public abstract void applyDiscount(DiscountProcessorChain processorChain);
 }
